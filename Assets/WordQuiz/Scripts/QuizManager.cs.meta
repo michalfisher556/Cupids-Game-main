@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: 092fd99563c48b447beef95b916a1bb1
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - inputField: {instanceID: 0}
+  - letterContainer: {fileID: 897678789737596735, guid: 6e02745f1af640846be6fb4e6aaaf745,
+      type: 3}
+  - questionImageUI: {instanceID: 0}
+  - questionTextUI: {instanceID: 0}
+  - messageText: {instanceID: 0}
+  - correctSound: {instanceID: 0}
+  - wrongSound: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

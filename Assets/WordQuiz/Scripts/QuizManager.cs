@@ -13,6 +13,13 @@ public class QuizManager : MonoBehaviour
     public QuestionData question;
 
     [SerializeField]
+    private TMP_Text popHint;
+
+    
+
+    [SerializeField]
+    private Transform AnswerHolder;
+
     private TMP_InputField[] inputFields; // Array of input fields
 
     [SerializeField]
@@ -38,8 +45,54 @@ public class QuizManager : MonoBehaviour
     private int mistakes = 0;
     private int firstWordLength = 0;
 
+    private void Awake()
+{
+    if (AnswerHolder == null)
+    {
+        Debug.LogError("AnswerHolder is not assigned!", this);
+        return;
+    }
+
+    int counter = AnswerHolder.childCount;
+    inputFields = new TMP_InputField[counter];
+
+    int validIndex = 0; // Track only valid input fields
+    for (int i = 0; i < counter; i++)
+    {
+        TMP_InputField inputField = AnswerHolder.GetChild(i).GetComponent<TMP_InputField>();
+
+        if (inputField != null)
+        {
+            inputFields[validIndex] = inputField;
+            validIndex++;
+        }
+        else
+        {
+            Debug.LogWarning($"Child {i} does not contain a TMP_InputField!");
+        }
+    }
+
+    // Resize the array to remove null elements
+    System.Array.Resize(ref inputFields, validIndex);
+}
+
+
     private void Start()
     {
+        
+        
+        
+        for (int i = 0; i < inputFields.Length - 1; i++) // Exclude the last field to avoid errors
+        {
+            int nextIndex = i + 1;
+            inputFields[i].onValueChanged.AddListener((value) =>
+            {
+                if (!string.IsNullOrEmpty(value)) // Ensure something is typed before moving
+                {
+                    inputFields[nextIndex].Select(); // Move focus to the next field
+                }
+            });
+        }
         audioSource = GetComponent<AudioSource>();
         DisplayQuestion();
     }
@@ -64,6 +117,8 @@ public class QuizManager : MonoBehaviour
                 questionImageUI.gameObject.SetActive(false);
             }
         }
+
+        inputFields[0].Select();
     }
 
     public void CheckAnswer()
@@ -216,7 +271,8 @@ public class QuizManager : MonoBehaviour
         switch(hintIndex)
         {
             case 1:
-              firstHint();
+             // firstHint();
+             PopupHint();
               break;
             case 2:
               secondHint();
@@ -229,6 +285,11 @@ public class QuizManager : MonoBehaviour
               break;
         }
         
+    }
+
+    private void PopupHint()
+    {
+       popHint.text = question.HintSentence;
     }
 
 
